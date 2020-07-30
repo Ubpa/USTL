@@ -1,0 +1,18 @@
+# binary files
+*.png
+*.jpg
+*.bmp
+*.gif
+*.dds
+
+*.pdf
+
+*.mp4
+
+*.xmind
+
+# directories
+resources/
+bin/
+lib/
+build/
