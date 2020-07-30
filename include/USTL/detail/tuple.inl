@@ -51,12 +51,25 @@ namespace Ubpa::USTL::detail {
 		else
 			return std::forward<Acc>(acc);
 	}
+
+	template<typename Tuple, typename Func, size_t... Ns>
+	constexpr size_t tuple_find_if(const Tuple& t, Func&& f, std::index_sequence<Ns...>) {
+		if constexpr (sizeof...(Ns) > 0) {
+			using IST_Ns = IntegerSequenceTraits<std::index_sequence<Ns...>>;
+			if (std::forward<Func>(f)(std::get<IST_Ns::head>(t)))
+				return IST_Ns::head;
+			else
+				return tuple_find_if(t, std::forward<Func>(f), IST_Ns::tail);
+		}
+		else
+			return static_cast<size_t>(-1);
+	}
 }
 
 namespace Ubpa::USTL {
 	template<bool... Masks, typename Tuple, typename Init, typename Func>
 	constexpr auto tuple_accumulate(Tuple&& t, Init&& i, Func&& f) {
-		constexpr size_t N = std::tuple_size_v<Tuple>;
+		constexpr size_t N = std::tuple_size_v<std::decay_t<Tuple>>;
 		static_assert(sizeof...(Masks) <= N);
 		return detail::tuple_accumulate(
 			std::forward<Tuple>(t),
@@ -64,6 +77,89 @@ namespace Ubpa::USTL {
 			std::forward<Func>(f),
 			std::integer_sequence<bool, Masks...>{},
 			std::make_index_sequence<N>{}
+		);
+	}
+
+	template<bool... Masks, typename Tuple, typename Func>
+	constexpr void tuple_for_each(Tuple&& t, Func&& f) {
+		tuple_accumulate<Masks...>(
+			std::forward<Tuple>(t),
+			0,
+			[&](auto, auto&& val) {
+				std::forward<Func>(f)(std::forward<decltype(val)>(val));
+				return 0;
+			}
+		);
+	}
+
+	template<typename Tuple, typename Func>
+	constexpr size_t tuple_find_if(const Tuple& t, Func&& f) {
+		return detail::tuple_find_if(
+			t,
+			std::forward<Func>(f),
+			std::make_index_sequence<std::tuple_size_v<Tuple>>{}
+		);
+	}
+
+	template<typename Tuple, typename Elem>
+	constexpr size_t tuple_find(const Tuple& t, const Elem& e) {
+		return tuple_find_if(
+			t,
+			[&](const auto& t_e) {
+				if constexpr (std::is_same_v<std::decay_t<decltype(t_e)>, Elem>)
+					return t_e == e;
+				else
+					return false;
+			}
+		);
+	}
+
+	template<typename Tuple, typename Func>
+	constexpr size_t tuple_count_if(const Tuple& t, Func&& f) {
+		return tuple_accumulate(t, 0, [&](auto cnt, const auto& e) {
+			if (std::forward<Func>(f)(e))
+				return cnt + 1;
+			else
+				return cnt;
+		});
+	}
+
+	template<typename Tuple, typename Elem>
+	constexpr size_t tuple_count(const Tuple& t, const Elem& e) {
+		return tuple_count_if(
+			t,
+			[&](const auto& t_e) {
+				if constexpr (std::is_same_v<std::decay_t<decltype(t_e)>, Elem>)
+					return t_e == e;
+				else
+					return false;
+			}
+		);
+	}
+
+	template<typename Tuple, typename... Elems>
+	constexpr auto tuple_append(Tuple&& src, Elems&&... elems) {
+		return std::apply(
+			[&](auto&&... src_elems) {
+				return std::tuple{
+					std::forward<decltype(src_elems)>(src_elems)...,
+					std::forward<Elems>(elems)... 
+				};
+			},
+			std::forward<Tuple>(src)
+		);
+	}
+
+	template<typename Tuple, typename... Elems>
+	constexpr auto tuple_prepend(Tuple&& src, Elems&&... elems) {
+		return std::apply(
+			[&](auto&&... src_elems) {
+				return std::tuple{
+					std::forward<Elems>(elems)...,
+					std::forward<decltype(src_elems)>(src_elems)...
+				};
+			},
+			std::forward<Tuple>(src)
 		);
 	}
 }
