@@ -192,4 +192,12 @@ namespace Ubpa::USTL {
 	}
 }
 
+namespace std {
+	template<size_t Index, size_t N>
+	constexpr char get(Ubpa::USTL::cstring<N> cstr) noexcept {
+		static_assert(Index < N);
+		return cstr[Index];
+	}
+}
+
 #include "detail/cstring.inl"
