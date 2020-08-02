@@ -114,6 +114,11 @@ namespace Ubpa::USTL {
 		);
 	}
 
+	template<typename Tuple, typename Elem>
+	constexpr bool tuple_constains(const Tuple& t, const Elem& e) {
+		return tuple_find(t, e) != static_cast<size_t>(-1);
+	}
+
 	template<typename Tuple, typename Func>
 	constexpr size_t tuple_count_if(const Tuple& t, Func&& f) {
 		return tuple_accumulate(t, 0, [&](auto cnt, const auto& e) {

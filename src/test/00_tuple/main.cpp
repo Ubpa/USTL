@@ -33,6 +33,12 @@ int main() {
 	);
 	static_assert(idx2 == 2);
 
+	constexpr auto exist = Ubpa::USTL::tuple_constains(
+		std::tuple{ 1,2,3 },
+		3
+	);
+	static_assert(exist);
+
 	constexpr auto cnt = Ubpa::USTL::tuple_count_if(
 		std::tuple{ 1,2,3 },
 		[](auto e) {

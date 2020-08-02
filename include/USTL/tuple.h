@@ -15,6 +15,9 @@ namespace Ubpa::USTL {
 	template<typename Tuple, typename Elem>
 	constexpr size_t tuple_find(const Tuple&, const Elem&);
 
+	template<typename Tuple, typename Elem>
+	constexpr bool tuple_constains(const Tuple&, const Elem&);
+
 	template<typename Tuple, typename Func>
 	constexpr size_t tuple_count_if(const Tuple&, Func&&);
 
