@@ -7,7 +7,7 @@
 namespace Ubpa::USTL {
 	template <std::size_t N>
 	class cstring {
-		static_assert(N > 0, "nameof::cstring requires size greater than 0.");
+		static_assert(N > 0, "cstring requires size greater than 0.");
 
 		std::array<char, N + 1> chars_;
 
