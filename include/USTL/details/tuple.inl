@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace Ubpa::USTL::detail {
+namespace Ubpa::USTL::details {
 	template<typename Ints> struct IntegerSequenceTraits;
 
 	template<typename T, T N0, T... Ns>
@@ -71,7 +71,7 @@ namespace Ubpa::USTL {
 	constexpr auto tuple_accumulate(Tuple&& t, Init&& i, Func&& f) {
 		constexpr size_t N = std::tuple_size_v<std::decay_t<Tuple>>;
 		static_assert(sizeof...(Masks) <= N);
-		return detail::tuple_accumulate(
+		return details::tuple_accumulate(
 			std::forward<Tuple>(t),
 			std::forward<Init>(i),
 			std::forward<Func>(f),
@@ -94,7 +94,7 @@ namespace Ubpa::USTL {
 
 	template<typename Tuple, typename Func>
 	constexpr size_t tuple_find_if(const Tuple& t, Func&& f) {
-		return detail::tuple_find_if(
+		return details::tuple_find_if(
 			t,
 			std::forward<Func>(f),
 			std::make_index_sequence<std::tuple_size_v<Tuple>>{}

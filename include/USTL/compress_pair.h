@@ -11,7 +11,7 @@ namespace Ubpa::USTL {
 	}; // tag type for constructing first from one arg, constructing second from remaining args
 }
 
-#include "detail/compress_pair.inl"
+#include "details/compress_pair.inl"
 
 namespace Ubpa::USTL {
 	// if First is empty and not final, compress it by derived from it

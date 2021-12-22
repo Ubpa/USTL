@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Ubpa::USTL::detail {
+namespace Ubpa::USTL::details {
 	template<auto Num, size_t System>
 	constexpr auto cstring_integer_in_system_between_3_to_10() noexcept {
 		using T = decltype(Num);

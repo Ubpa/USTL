@@ -31,4 +31,4 @@ namespace Ubpa::USTL {
 	constexpr auto tuple_prepend(Tuple&&, Elems&&...);
 }
 
-#include "detail/tuple.inl"
+#include "details/tuple.inl"

@@ -196,11 +196,11 @@ namespace std {
 	}
 }
 
-#include "detail/cstring.inl"
+#include "details/cstring.inl"
 
 namespace Ubpa::USTL
 {
 	// 2-10, 16
 	template<auto Num, size_t System = 10>
-	constexpr auto cstring_integer = detail::cstring_integer_<Num, System>();
+	constexpr auto cstring_integer = details::cstring_integer_<Num, System>();
 }
