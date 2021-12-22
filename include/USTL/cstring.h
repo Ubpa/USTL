@@ -111,10 +111,6 @@ namespace Ubpa::USTL {
 		explicit operator std::basic_string<Char, Traits, Allocator>() const { return { begin(), end() }; }
 	};
 
-	// 2-10, 16
-	template<auto Num, size_t System = 10>
-	constexpr auto cstring_integer = detail::cstring_integer_<Num, System>();
-
 	cstring(char)->cstring<1>;
 	template<size_t N>
 	cstring(const char(&)[N])->cstring<N - 1>;
@@ -201,3 +197,10 @@ namespace std {
 }
 
 #include "detail/cstring.inl"
+
+namespace Ubpa::USTL
+{
+	// 2-10, 16
+	template<auto Num, size_t System = 10>
+	constexpr auto cstring_integer = detail::cstring_integer_<Num, System>();
+}
